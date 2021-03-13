@@ -15,7 +15,8 @@ def ping(data, guid):
 
 @app.route("/")
 def index():
-	return "Welcome!"
+	return "<h1>Welcome to our server !!</h1>"
 
 
-app.run()
+if __name__ == '__main__':
+	app.run(threaded=True, port=5000)
