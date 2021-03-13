@@ -21,7 +21,7 @@ def index():
 	return "<h1>Will update this page soon !!</h1>"
 
 
-@HOOKS.hook('pull_request')
+@hooks.hook('pull_request')
 def pull_request(data, guid):
     if isValidPullRequest(data):
         notifyRecipient(data)
