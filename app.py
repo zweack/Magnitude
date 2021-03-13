@@ -3,7 +3,7 @@ from flask import Flask
 from flask_hookserver import Hooks
 
 from github import isValidPullRequest
-from slack import notifyRecipient
+from slackInt import notifyRecipient
 
 app = Flask(__name__)
 app.config['GITHUB_WEBHOOKS_KEY'] = os.environ.get('GITHUB_WEBHOOKS_KEY')
