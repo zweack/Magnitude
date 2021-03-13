@@ -1,5 +1,4 @@
 language: python
-# linux
 dist: xenial
 python:
   - 3.6
