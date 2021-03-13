@@ -18,7 +18,7 @@ def ping(data, guid):
 
 @app.route("/")
 def index():
-	return "<h1>Will update this page soon !!</h1>"
+	return "<h1>Will update this page soon, stay tuned !!</h1>"
 
 
 @hooks.hook('pull_request')
