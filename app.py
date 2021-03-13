@@ -2,6 +2,8 @@ import os
 from flask import Flask
 from flask_hookserver import Hooks
 
+from github import isValidPullRequest, notifyRecipient
+
 app = Flask(__name__)
 app.config['GITHUB_WEBHOOKS_KEY'] = os.environ.get('GITHUB_WEBHOOKS_KEY')
 app.config['VALIDATE_IP'] = False
@@ -15,7 +17,18 @@ def ping(data, guid):
 
 @app.route("/")
 def index():
-	return "<h1>Welcome to our server !!</h1>"
+	return "<h1>Will update this page soon !!</h1>"
+
+
+@HOOKS.hook('pull_request')
+def pull_request(data, guid):
+    if isValidPullRequest(data):
+        notifyRecipient(data)
+        result = 'Recipient Notified'
+    else:
+        result = 'Action ({}) ignored'.format(data.get('action'))
+
+    return result
 
 
 if __name__ == '__main__':
