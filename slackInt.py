@@ -93,8 +93,9 @@ def getPullRequestMetadata(data):
 
 def getNotificationChannel(data):
     github_username = getRecipientGithubUserNameByAction(data)
+    print(github_username)
     slack_username = getSlackUserNameByGithubUserName(github_username)
-
+    print(slack_username)
     if slack_username:
         channel = '@{}'.format(slack_username)
     else:
