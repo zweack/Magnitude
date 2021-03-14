@@ -11,6 +11,7 @@ from github import lookupGithubFullName
 
 
 def notifyRecipient(data):
+    print(data)
     payload = createSlackMessagePayload(data)
     sendSlackMessage(payload)
 
@@ -66,6 +67,7 @@ def buildPayload(msg_text, pr_metadata):
 
 
 def getPullRequestMetadata(data):
+    print(data)
     pullRequestData = {}
     payloadParser = GithubWebhookPayloadParser(data)
 
@@ -145,7 +147,7 @@ def getUnmatchedUserName(data):
 
 def sendSlackMessage(payload):
     slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-    response = slack_client.api_call("chat.postMessage", **payload)
+    response = slack_client.api_call(api_method = "chat.postMessage", json = payload)
 
     logger = logging.getLogger(__name__)
     if not response.get('ok'):
