@@ -11,7 +11,6 @@ from github import lookupGithubFullName
 
 
 def notifyRecipient(data):
-    print(data)
     payload = createSlackMessagePayload(data)
     sendSlackMessage(payload)
 
@@ -67,7 +66,6 @@ def buildPayload(msg_text, pr_metadata):
 
 
 def getPullRequestMetadata(data):
-    print(data)
     pullRequestData = {}
     payloadParser = GithubWebhookPayloadParser(data)
 
@@ -93,9 +91,7 @@ def getPullRequestMetadata(data):
 
 def getNotificationChannel(data):
     github_username = getRecipientGithubUserNameByAction(data)
-    print(github_username)
     slack_username = getSlackUserNameByGithubUserName(github_username)
-    print(slack_username)
     if slack_username:
         channel = '@{}'.format(slack_username)
     else:
