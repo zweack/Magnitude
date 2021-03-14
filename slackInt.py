@@ -138,7 +138,7 @@ def matchSlackUserNameByFullName(users, full_name):
 
 def getUnmatchedUserName(data):
     payloadParser = GithubWebhookPayloadParser(data)
-    github_username = payloadParser.get_request_reviewer_username()
+    github_username = payloadParser.getRequestReviewerUserName()
 
     if github_username is not None:
         return '@{}'.format(github_username)
