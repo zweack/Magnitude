@@ -92,7 +92,6 @@ def getPullRequestMetadata(data):
 def getNotificationChannel(data):
     github_username = getRecipientGithubUserNameByAction(data)
     slack_username = getSlackUserNameByGithubUserName(github_username)
-
     if slack_username:
         channel = '@{}'.format(slack_username)
     else:
@@ -135,7 +134,7 @@ def matchSlackUserNameByFullName(users, full_name):
 
 def getUnmatchedUserName(data):
     payloadParser = GithubWebhookPayloadParser(data)
-    github_username = payloadParser.get_request_reviewer_username()
+    github_username = payloadParser.getRequestReviewerUserName()
 
     if github_username is not None:
         return '@{}'.format(github_username)
@@ -145,7 +144,7 @@ def getUnmatchedUserName(data):
 
 def sendSlackMessage(payload):
     slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-    response = slack_client.api_call("chat.postMessage", **payload)
+    response = slack_client.api_call(api_method = "chat.postMessage", json = payload)
 
     logger = logging.getLogger(__name__)
     if not response.get('ok'):
