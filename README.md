@@ -1,8 +1,13 @@
 # Magnitude
 #### Get automated Github Pull Requests notification for individual team members or on your team's channel on Slack
 
+#### Pull Request Assigned
+![assigned](https://github.com/zweack/Magnitude/blob/dev/static/pr_assigned.png)
+#### Pull Request Review Requested
+![review_requested](https://github.com/zweack/Magnitude/blob/dev/static/review_requested.png)
+
 ### Target Audience
-#### This application is developed for corporate employees who may not be able to configure Github-Slack integration due restrictions behind corporate networks.
+This application is developed for corporate employees who may not be able to configure Github-Slack integration due restrictions behind corporate networks.
 
 ### Application Setup
 1. Create a [Github Personal Access Token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) which will be used to lookup github username/full name.
