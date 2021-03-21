@@ -32,7 +32,7 @@ def getMessage(pr_metadata, data):
     else:
         actionMessage = 'pinged'
 
-    msg_text = "You've been {action}. Lucky you!".format(action=actionMessage)
+    msg_text = "You've been {action}. Good luck!".format(action=actionMessage)
     if pr_metadata.get('channel') == os.environ.get('DEFAULT_NOTIFICATION_CHANNEL'):
         github_username = getUnmatchedUserName(data)
         msg_text = '{}! {}'.format(github_username, msg_text)
@@ -56,7 +56,7 @@ def buildPayload(msg_text, pr_metadata):
                 "title": pr_metadata.get('title'),
                 "title_link": pr_metadata.get('url'),
                 "text": pr_metadata.get('description'),
-                "footer": "Github PR Notifier",
+                "footer": "PR Notifications by Magnitude",
                 "footer_icon": pr_metadata.get('author_image'),
                 "ts": int(datetime.datetime.now().timestamp())
             }
