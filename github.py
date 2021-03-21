@@ -42,7 +42,7 @@ def lookupGithubFullName(gh_username):
     return user.get('name', '')
 
 
-def notifyRecipient(data):
+def prepareReviewResponse(data):
     pass
 
 
