@@ -16,48 +16,48 @@ def notifyRecipient(data):
 
 
 def createSlackMessagePayload(data):
-    pr_metadata = getPullRequestMetadata(data)
+    prMetadata = getPullRequestMetadata(data)
 
-    msg_text = getMessage(pr_metadata, data)
-    message = buildPayload(msg_text, pr_metadata)
+    msgText = getMessage(prMetadata, data)
+    message = buildPayload(msgText, prMetadata)
 
     return message
 
 
-def getMessage(pr_metadata, data):
+def getMessage(prMetadata, data):
     if data.get('action') == 'review_requested':
-        actionMessage = 'asked by {author} to review a pull request'.format(author=pr_metadata.get('author'))
+        actionMessage = 'asked by {author} to review a pull request'.format(author=prMetadata.get('author'))
     elif data.get('action') == 'assigned':
-        actionMessage = 'assigned a pull request by {author}'.format(author=pr_metadata.get('author'))
+        actionMessage = 'assigned a pull request by {author}'.format(author=prMetadata.get('author'))
     else:
         actionMessage = 'pinged'
 
-    msg_text = "You've been {action}. Good luck!".format(action=actionMessage)
-    if pr_metadata.get('channel') == os.environ.get('DEFAULT_NOTIFICATION_CHANNEL'):
+    msgText = "You've been {action}. Good luck!".format(action=actionMessage)
+    if prMetadata.get('channel') == os.environ.get('DEFAULT_NOTIFICATION_CHANNEL'):
         github_username = getUnmatchedUserName(data)
-        msg_text = '{}! {}'.format(github_username, msg_text)
+        msgText = '{}! {}'.format(github_username, msgText)
 
-    return msg_text
+    return msgText
 
 
-def buildPayload(msg_text, pr_metadata):
+def buildPayload(msgText, prMetadata):
     message = {
-        "text": msg_text,
+        "text": msgText,
         "as_user": True,
         "link_names": True,
-        "channel": pr_metadata.get('channel'),
+        "channel": prMetadata.get('channel'),
         "attachments": [
             {
-                "fallback": "<{}|{}>".format(pr_metadata.get('url'), pr_metadata.get('title')),
+                "fallback": "<{}|{}>".format(prMetadata.get('url'), prMetadata.get('title')),
                 "color": "#36a64f",
-                "author_name": "{} pull request #{}".format(pr_metadata.get('repo'), pr_metadata.get('number')),
-                "author_link": pr_metadata.get('url'),
+                "author_name": "{} pull request #{}".format(prMetadata.get('repo'), prMetadata.get('number')),
+                "author_link": prMetadata.get('url'),
                 "author_icon": "https://github.com/favicon.ico",
-                "title": pr_metadata.get('title'),
-                "title_link": pr_metadata.get('url'),
-                "text": pr_metadata.get('description'),
+                "title": prMetadata.get('title'),
+                "title_link": prMetadata.get('url'),
+                "text": prMetadata.get('description'),
                 "footer": "PR Notifications by Magnitude",
-                "footer_icon": pr_metadata.get('author_image'),
+                "footer_icon": prMetadata.get('author_image'),
                 "ts": int(datetime.datetime.now().timestamp())
             }
         ]
@@ -100,7 +100,7 @@ def getNotificationChannel(data):
     return channel
 
 
-def getSlackUserNameByGithubUserName(github_username):  # pylint: disable=invalid-name
+def getSlackUserNameByGithubUserName(github_username):
     slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
     response = slack_client.api_call("users.list")
     users = response.get('members', [])
