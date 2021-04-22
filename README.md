@@ -13,7 +13,7 @@ This application is developed for corporate employees who may not be able to con
 1. Create a [Github Personal Access Token](https://help.github.com/articles/creating-a-personal-access-token-for-the-command-line/) which will be used to lookup github username/full name.
 2. Create a [Slack Application](https://api.slack.com/apps?new_app=1&ref=bolt_start_hub) which will be used to configure Slack Bot.
 3. Create a [Slack Bot](https://slack.com/intl/en-gb/help/articles/115005265703-Create-a-bot-for-your-workspace#create-a-bot) using the application created in previous step. Give appropriate read and write scopes to your bot.
-4. Clone this repo and deploy it on a dedicated server in your corporate network/cloud. For demo purpose, I have deployed this on [Heroku](https://dashboard.heroku.com/apps).
+4. Clone this repo and deploy it on a dedicated server in your corporate network/cloud. For demo purpose, I have deployed this on [Heroku](https://dashboard.heroku.com/apps). Make sure that `app.py` is configured as starting point of the application on your host. 
 5. Create a custom [Github Webhook](https://docs.github.com/en/developers/webhooks-and-events/creating-webhooks) in a repo whose Pull Request notifications you want to trigger. <br/> If host address is `abc.com`, put webhook URL as `abc.com/hooks` <br/> Put a strong webhook secret and make a note of it.
 6. Configure a new/existing channel to be used as default in case a username is not resolved. Add your Slack Bot in this channel. 
 7. Setup following Environment Variables on your server:
