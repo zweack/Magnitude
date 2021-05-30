@@ -1,3 +1,5 @@
+""" Get data from github hook server and parse it. """
+
 import copy
 import os
 
@@ -6,6 +8,7 @@ from werkzeug.exceptions import BadRequest
 
 
 def isValidPullRequest(data):
+    """ Check if pull request is valid. """
     isValidRequest = validatePullRequest(data)
     isValidAction = data.get('action') == 'review_requested' or data.get(
         'action') == 'assigned'
@@ -14,6 +17,7 @@ def isValidPullRequest(data):
 
 
 def validatePullRequest(data):
+    """ Validate pull request by action. """
     if 'action' not in data:
         raise BadRequest('no event supplied')
 
@@ -24,6 +28,7 @@ def validatePullRequest(data):
 
 
 def getRecipientGithubUserNameByAction(data):
+    """ Get github user name by github action. """
     payloadParser = GithubWebhookPayloadParser(data)
 
     if data.get('action') == 'review_requested':
@@ -37,6 +42,7 @@ def getRecipientGithubUserNameByAction(data):
 
 
 def lookupGithubFullName(gh_username):
+    """ Get full name of the user """
     url = 'https://api.github.com/users/{}'.format(gh_username)
     request = requests.get(url, auth=(os.environ.get(
         'GITHUB_API_USER', ''), os.environ.get('GITHUB_API_TOKEN', '')))
@@ -45,7 +51,9 @@ def lookupGithubFullName(gh_username):
 
 
 def notifyRecipient(data):
-    pass
+    """Notify PR author about reviews. """
+    # Work in progress
+    return data
 
 
 class GithubWebhookPayloadParser:

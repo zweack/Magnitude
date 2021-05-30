@@ -1,3 +1,7 @@
+"""
+Entry point of the appliction
+"""
+
 import os
 from flask import Flask
 from flask_hookserver import Hooks
@@ -14,13 +18,14 @@ hooks = Hooks(app, url='/hooks')
 
 
 @hooks.hook('ping')
-def ping(data, guid):
+def ping():
+    """ Test Function """
     return 'pong'
 
 
 @app.route("/")
 def index():
-    # Sample HTML (converted from readme)
+    """ Print sample HTML (converted from readme) """
     return """
     <!DOCTYPE html><html><head><meta charset="utf-8"><title>Magnitude</title><style>body {
     font-family: "Lucida Console", "Courier New", monospace;}</style></head><body id="preview">
@@ -72,6 +77,7 @@ def index():
 
 @hooks.hook('pull_request')
 def pull_request(data, guid):
+    """ Verify pull request data and send slack notification. """
     if isValidPullRequest(data):
         notifyRecipient(data)
         result = 'Recipient Notified'
