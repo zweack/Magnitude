@@ -1,3 +1,3 @@
 def test_isValidPullRequest(data=None):
-    """Sample test. """
+    """Sample test."""
     assert True == True

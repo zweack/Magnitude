@@ -1,4 +1,4 @@
-""" Get data from github hook server and parse it. """
+"""Get data from github hook server and parse it."""
 
 import copy
 import os
@@ -8,7 +8,7 @@ from werkzeug.exceptions import BadRequest
 
 
 def isValidPullRequest(data):
-    """ Check if pull request is valid. """
+    """Check if pull request is valid."""
     isValidRequest = validatePullRequest(data)
     isValidAction = data.get('action') == 'review_requested' or data.get(
         'action') == 'assigned'
@@ -17,7 +17,7 @@ def isValidPullRequest(data):
 
 
 def validatePullRequest(data):
-    """ Validate pull request by action. """
+    """Validate pull request by action."""
     if 'action' not in data:
         raise BadRequest('no event supplied')
 
@@ -28,7 +28,7 @@ def validatePullRequest(data):
 
 
 def getRecipientGithubUserNameByAction(data):
-    """ Get github user name by github action. """
+    """Get github user name by github action."""
     payloadParser = GithubWebhookPayloadParser(data)
 
     if data.get('action') == 'review_requested':
@@ -42,7 +42,7 @@ def getRecipientGithubUserNameByAction(data):
 
 
 def lookupGithubFullName(gh_username):
-    """ Get full name of the user """
+    """Get full name of the user"""
     url = 'https://api.github.com/users/{}'.format(gh_username)
     request = requests.get(url, auth=(os.environ.get(
         'GITHUB_API_USER', ''), os.environ.get('GITHUB_API_TOKEN', '')))
@@ -51,13 +51,13 @@ def lookupGithubFullName(gh_username):
 
 
 def notifyRecipient(data):
-    """Notify PR author about reviews. """
+    """Notify PR author about reviews."""
     # Work in progress
     return data
 
 
 class GithubWebhookPayloadParser:
-    """ A class to parse a github payload and return specific elements. """
+    """A class to parse a github payload and return specific elements."""
 
     def __init__(self, data=None):
         if data is None:
@@ -65,37 +65,37 @@ class GithubWebhookPayloadParser:
         self._data = copy.deepcopy(data)
 
     def getRequestReviewerUserName(self):
-        """ Parse and retrieve the requested reviewer username. """
+        """Parse and retrieve the requested reviewer username."""
         return self._data.get('requested_reviewer', {}).get('login')
 
     def getAssigneeUserName(self):
-        """ Parse and retrieve the assignee's username. """
+        """Parse and retrieve the assignee's username."""
         return self._data.get('assignee', {}).get('login')
 
     def getPullRequestTitle(self):
-        """ Parse and retrieve the pull request title. """
+        """Parse and retrieve the pull request title."""
         return self._data.get('pull_request', {}).get('title')
 
     def getPullRequestUrl(self):
-        """ Parse and retrieve the pull request html url. """
+        """Parse and retrieve the pull request html url."""
         return self._data.get('pull_request', {}).get('html_url')
 
     def getPullRequestRepo(self):
-        """ Parse and retrieve the pull request repository name. """
+        """Parse and retrieve the pull request repository name."""
         return self._data.get('repository', {}).get('full_name')
 
     def getPullRequestNumber(self):
-        """ Parse and retrieve the pull request number. """
+        """Parse and retrieve the pull request number."""
         return self._data.get('number')
 
     def getPullRequestAuthor(self):
-        """ Parse and retrieve the pull request author. """
+        """Parse and retrieve the pull request author."""
         return self._data.get('pull_request', {}).get('user', {}).get('login')
 
     def getPullRequestAuthorImage(self):
-        """ Parse and retrieve the pull request author image. """
+        """Parse and retrieve the pull request author image."""
         return self._data.get('pull_request', {}).get('user', {}).get('avatar_url')
 
     def getPullRequestDescription(self):
-        """ Parse and retrieve the pull request repository description. """
+        """Parse and retrieve the pull request repository description."""
         return self._data.get('pull_request', {}).get('body')

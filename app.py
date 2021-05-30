@@ -19,13 +19,13 @@ hooks = Hooks(app, url='/hooks')
 
 @hooks.hook('ping')
 def ping():
-    """ Test Function """
+    """Test Function."""
     return 'pong'
 
 
 @app.route("/")
 def index():
-    """ Print sample HTML (converted from readme) """
+    """Print sample HTML (converted from readme)"""
     return """
     <!DOCTYPE html><html><head><meta charset="utf-8"><title>Magnitude</title><style>body {
     font-family: "Lucida Console", "Courier New", monospace;}</style></head><body id="preview">
@@ -77,7 +77,7 @@ def index():
 
 @hooks.hook('pull_request')
 def pull_request(data, guid):
-    """ Verify pull request data and send slack notification. """
+    """Verify pull request data and send slack notification."""
     if isValidPullRequest(data):
         notifyRecipient(data)
         result = 'Recipient Notified'
