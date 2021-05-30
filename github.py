@@ -42,7 +42,7 @@ def getRecipientGithubUserNameByAction(data):
 
 
 def lookupGithubFullName(gh_username):
-    """Get full name of the user"""
+    """Get full name of the user."""
     url = 'https://api.github.com/users/{}'.format(gh_username)
     request = requests.get(url, auth=(os.environ.get(
         'GITHUB_API_USER', ''), os.environ.get('GITHUB_API_TOKEN', '')))

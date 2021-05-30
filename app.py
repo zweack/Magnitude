@@ -1,6 +1,4 @@
-"""
-Entry point of the appliction
-"""
+"""Entry point of the appliction."""
 
 import os
 from flask import Flask
@@ -25,7 +23,7 @@ def ping():
 
 @app.route("/")
 def index():
-    """Print sample HTML (converted from readme)"""
+    """Print sample HTML converted from readme."""
     return """
     <!DOCTYPE html><html><head><meta charset="utf-8"><title>Magnitude</title><style>body {
     font-family: "Lucida Console", "Courier New", monospace;}</style></head><body id="preview">
