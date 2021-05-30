@@ -1,3 +1,5 @@
+"""Generate salck message and send it to appropriate recipient."""
+
 import datetime
 import logging
 import math
@@ -11,12 +13,14 @@ from github import lookupGithubFullName
 
 
 def notifyRecipient(data):
+    """Notify the selected recipient on slack."""
     payload = createSlackMessagePayload(data)
     sendSlackMessage(payload)
 
 
 def createSlackMessagePayload(data):
-    prMetadata = getPullRequestMetadata(data)
+    """Create payload for slack notification."""
+    pr_metadata = getPullRequestMetadata(data)
 
     msgText = getMessage(prMetadata, data)
     message = buildPayload(msgText, prMetadata)
@@ -24,11 +28,14 @@ def createSlackMessagePayload(data):
     return message
 
 
-def getMessage(prMetadata, data):
+def getMessage(pr_metadata, data):
+    """Generate message based on github action."""
     if data.get('action') == 'review_requested':
-        actionMessage = 'asked by {author} to review a pull request'.format(author=prMetadata.get('author'))
+        actionMessage = 'asked by {author} to review a pull request'.format(
+            author=pr_metadata.get('author'))
     elif data.get('action') == 'assigned':
-        actionMessage = 'assigned a pull request by {author}'.format(author=prMetadata.get('author'))
+        actionMessage = 'assigned a pull request by {author}'.format(
+            author=pr_metadata.get('author'))
     else:
         actionMessage = 'pinged'
 
@@ -40,7 +47,8 @@ def getMessage(prMetadata, data):
     return msgText
 
 
-def buildPayload(msgText, prMetadata):
+def buildPayload(msg_text, pr_metadata):
+    """Build slack notification payload from github action data."""
     message = {
         "text": msgText,
         "as_user": True,
@@ -66,18 +74,21 @@ def buildPayload(msgText, prMetadata):
 
 
 def getPullRequestMetadata(data):
+    """Fetch pull request metadata."""
     pullRequestData = {}
     payloadParser = GithubWebhookPayloadParser(data)
 
     pullRequestData['url'] = payloadParser.getPullRequestUrl()
-    pullRequestData['title'] = payloadParser.getPullRequestTitle() or 'Unknown Title'
+    pullRequestData['title'] = payloadParser.getPullRequestTitle(
+    ) or 'Unknown Title'
     pullRequestData['repo'] = payloadParser.getPullRequestRepo() or 'Unknown'
     pullRequestData['number'] = payloadParser.getPullRequestNumber() or math.pi
     pullRequestData['author_image'] = payloadParser.getPullRequestAuthorImage()
     pullRequestData['description'] = payloadParser.getPullRequestDescription()
     pullRequestData['channel'] = getNotificationChannel(data)
 
-    pullRequestAuthor = getSlackUserNameByGithubUserName(payloadParser.getPullRequestAuthor())
+    pullRequestAuthor = getSlackUserNameByGithubUserName(
+        payloadParser.getPullRequestAuthor())
 
     if pullRequestAuthor:
         pullRequestAuthor = '@{}'.format(pullRequestAuthor)
@@ -90,6 +101,7 @@ def getPullRequestMetadata(data):
 
 
 def getNotificationChannel(data):
+    """Get target slack channel for notification."""
     github_username = getRecipientGithubUserNameByAction(data)
     slack_username = getSlackUserNameByGithubUserName(github_username)
     if slack_username:
@@ -101,6 +113,7 @@ def getNotificationChannel(data):
 
 
 def getSlackUserNameByGithubUserName(github_username):
+    """Get slack username based on github username."""
     slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
     response = slack_client.api_call("users.list")
     users = response.get('members', [])
@@ -115,6 +128,7 @@ def getSlackUserNameByGithubUserName(github_username):
 
 
 def matchSlackGithubUserName(users, github_username):
+    """Compare slack and github username for a user."""
     for user in users:
         if isinstance(user, dict) and (
                 user.get('name').lower() == github_username.lower()
@@ -125,6 +139,7 @@ def matchSlackGithubUserName(users, github_username):
 
 
 def matchSlackUserNameByFullName(users, full_name):
+    """Compare salck username with github user full name."""
     if full_name:
         for user in users:
             if isinstance(user, dict) and user.get('real_name', '').strip().lower() == full_name.strip().lower():
@@ -133,6 +148,7 @@ def matchSlackUserNameByFullName(users, full_name):
 
 
 def getUnmatchedUserName(data):
+    """Set username for unmatched user in slack."""
     payloadParser = GithubWebhookPayloadParser(data)
     github_username = payloadParser.getRequestReviewerUserName()
 
@@ -143,11 +159,14 @@ def getUnmatchedUserName(data):
 
 
 def sendSlackMessage(payload):
+    """Send generated slack message ."""
     slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-    response = slack_client.api_call(api_method = "chat.postMessage", json = payload)
+    response = slack_client.api_call(
+        api_method="chat.postMessage", json=payload)
 
     logger = logging.getLogger(__name__)
     if not response.get('ok'):
-        logger.warning('Unable to send message. Response: %s\nPayload:\n%s', response, payload)
+        logger.warning(
+            'Unable to send message. Response: %s\nPayload:\n%s', response, payload)
     else:
         logger.info('Success!')
