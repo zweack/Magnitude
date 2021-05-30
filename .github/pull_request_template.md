@@ -5,5 +5,5 @@
 ## Coding Standard
 
 Code changes checked with PyLint?
-  - \[ ] Yes
-  - \[ ] No
+  - [ ] Yes
+  - [ ] No
