@@ -12,14 +12,16 @@ app.config['VALIDATE_SIGNATURE'] = False
 
 hooks = Hooks(app, url='/hooks')
 
+
 @hooks.hook('ping')
 def ping(data, guid):
-	return 'pong'
+    return 'pong'
+
 
 @app.route("/")
 def index():
     # Sample HTML (converted from readme)
-	return """
+    return """
     <!DOCTYPE html><html><head><meta charset="utf-8"><title>Magnitude</title><style>body {
     font-family: "Lucida Console", "Courier New", monospace;}</style></head><body id="preview">
     <h1 class="code-line" data-line-start=0 data-line-end=1><a id="Magnitude_0"></a>Magnitude</h1>
@@ -80,4 +82,4 @@ def pull_request(data, guid):
 
 
 if __name__ == '__main__':
-	app.run(threaded=True, port=5000)
+    app.run(threaded=True, port=5000)

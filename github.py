@@ -7,7 +7,8 @@ from werkzeug.exceptions import BadRequest
 
 def isValidPullRequest(data):
     isValidRequest = validatePullRequest(data)
-    isValidAction = data.get('action') == 'review_requested' or data.get('action') == 'assigned'
+    isValidAction = data.get('action') == 'review_requested' or data.get(
+        'action') == 'assigned'
 
     return isValidRequest and isValidAction
 
@@ -37,7 +38,8 @@ def getRecipientGithubUserNameByAction(data):
 
 def lookupGithubFullName(gh_username):
     url = 'https://api.github.com/users/{}'.format(gh_username)
-    request = requests.get(url, auth=(os.environ.get('GITHUB_API_USER', ''), os.environ.get('GITHUB_API_TOKEN', '')))
+    request = requests.get(url, auth=(os.environ.get(
+        'GITHUB_API_USER', ''), os.environ.get('GITHUB_API_TOKEN', '')))
     user = request.json()
     return user.get('name', '')
 

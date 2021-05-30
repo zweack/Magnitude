@@ -26,9 +26,11 @@ def createSlackMessagePayload(data):
 
 def getMessage(pr_metadata, data):
     if data.get('action') == 'review_requested':
-        actionMessage = 'asked by {author} to review a pull request'.format(author=pr_metadata.get('author'))
+        actionMessage = 'asked by {author} to review a pull request'.format(
+            author=pr_metadata.get('author'))
     elif data.get('action') == 'assigned':
-        actionMessage = 'assigned a pull request by {author}'.format(author=pr_metadata.get('author'))
+        actionMessage = 'assigned a pull request by {author}'.format(
+            author=pr_metadata.get('author'))
     else:
         actionMessage = 'pinged'
 
@@ -70,14 +72,16 @@ def getPullRequestMetadata(data):
     payloadParser = GithubWebhookPayloadParser(data)
 
     pullRequestData['url'] = payloadParser.getPullRequestUrl()
-    pullRequestData['title'] = payloadParser.getPullRequestTitle() or 'Unknown Title'
+    pullRequestData['title'] = payloadParser.getPullRequestTitle(
+    ) or 'Unknown Title'
     pullRequestData['repo'] = payloadParser.getPullRequestRepo() or 'Unknown'
     pullRequestData['number'] = payloadParser.getPullRequestNumber() or math.pi
     pullRequestData['author_image'] = payloadParser.getPullRequestAuthorImage()
     pullRequestData['description'] = payloadParser.getPullRequestDescription()
     pullRequestData['channel'] = getNotificationChannel(data)
 
-    pullRequestAuthor = getSlackUserNameByGithubUserName(payloadParser.getPullRequestAuthor())
+    pullRequestAuthor = getSlackUserNameByGithubUserName(
+        payloadParser.getPullRequestAuthor())
 
     if pullRequestAuthor:
         pullRequestAuthor = '@{}'.format(pullRequestAuthor)
@@ -144,10 +148,12 @@ def getUnmatchedUserName(data):
 
 def sendSlackMessage(payload):
     slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
-    response = slack_client.api_call(api_method = "chat.postMessage", json = payload)
+    response = slack_client.api_call(
+        api_method="chat.postMessage", json=payload)
 
     logger = logging.getLogger(__name__)
     if not response.get('ok'):
-        logger.warning('Unable to send message. Response: %s\nPayload:\n%s', response, payload)
+        logger.warning(
+            'Unable to send message. Response: %s\nPayload:\n%s', response, payload)
     else:
         logger.info('Success!')
