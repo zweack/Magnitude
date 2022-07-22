@@ -27,4 +27,5 @@ This application is developed for corporate employees who may not be able to con
    ```
 8. Thats it. Now create a pull request, assign it to yourself or request review from someone and see the notification triggered on your Slack.
 
-Work In Progress: To send notification when a pull request is reviewed and approved or change(s) requested.
+### Upcoming Features
+Trigger notification when a pull request is reviewed and approved or change(s) requested.
